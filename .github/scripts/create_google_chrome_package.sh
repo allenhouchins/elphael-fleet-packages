@@ -97,6 +97,8 @@ fi
 
 echo "Google Chrome installer created successfully!"
 
+echo $PACKAGE_FILE
+
 # Verify that the package file exists
 if [ -f "$PACKAGE_FILE" ]; then
     echo "Found package: $PACKAGE_FILE"
