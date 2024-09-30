@@ -18,5 +18,5 @@ jobs:
       # Step 2: Run your GitOps script
       - name: Run deployment script
         run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh
+          chmod +x ../scripts/create_google_chrome_package.sh
+          ../scripts/create_google_chrome_package.sh
