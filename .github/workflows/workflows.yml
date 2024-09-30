@@ -18,5 +18,10 @@ jobs:
       # Step 2: Run your GitOps script
       - name: Run Google Chrome script
         run: |
-          chmod +x ./scripts/create_google_chrome_package.sh
-          ./scripts/create_google_chrome_package.sh
+          chmod +x ./.github/scripts/create_google_chrome_package.sh
+          ./.github/scripts/create_google_chrome_package.sh
+        env:
+          REPO_URL: ${{ secrets.REPO_URL }}
+          PACKAGE_AUTOMATION_TOKEN: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
+          REPO_OWNER: ${{ secrets.REPO_OWNER }}
+          REPO_NAME: ${{ secrets.REPO_NAME }}
