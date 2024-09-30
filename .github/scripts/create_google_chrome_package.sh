@@ -7,7 +7,6 @@ DOWNLOAD_PATH="/tmp/autopkg-2.7.3.pkg"
 # AUTOPKG_CACHE_PATH="${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/"
 # REPO_URL="xxx" ## Uncomment if running locally
 # PACKAGE_AUTOMATION_TOKEN="xxx" ## Uncomment if running locally
-PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg)
 # REPO_OWNER="xxx" ## Uncomment if running locally
 # REPO_NAME="" ## Uncomment if running locally
 
@@ -97,12 +96,13 @@ fi
 
 echo "Google Chrome installer created successfully!"
 
-echo "This is the Package File Path: $PACKAGE_FILE"
+PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg)
 
+echo "This is the Package File Path: $PACKAGE_FILE"
 
 # Verify that the package file exists
 if [ -f "$PACKAGE_FILE" ]; then
-    echo "Found package: $PACKAGE_FILE"
+   echo "Found package: $PACKAGE_FILE"
 else
     echo "No package file found in $AUTOPKG_CACHE_PATH!"
     exit 1
@@ -128,7 +128,6 @@ else
     add_git_lfs="echo "git lfs not needed. Continuing...""
 fi
 
-
 # Check if the recipe run was successful
 if [ $? -ne 0 ]; then
     echo "Failed to install git-lfs!"
@@ -144,10 +143,12 @@ git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.g
 
 # Copy the package to the GitHub repo
 echo "Copying package to GitHub repo..."
-cp "${PACKAGE_FILE}" /tmp/repo
+# cp "${PACKAGE_FILE}" /tmp/repo
+cp /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg /tmp/repo
 cd /tmp/repo
-echo "This is the git lfs command at this step: $add_git_lfs"
-eval "$add_git_lfs"
+# echo "This is the git lfs command at this step: $add_git_lfs"
+# eval "$add_git_lfs"
+git lfs install; git lfs track *.pkg; git add .gitattributes
 
 # Add, commit, and push the package to GitHub
 echo "Adding and committing the package..."
