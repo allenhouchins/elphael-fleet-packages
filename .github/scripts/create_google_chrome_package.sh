@@ -4,7 +4,7 @@
 PACKAGE_URL="https://github.com/autopkg/autopkg/releases/download/v2.7.3/autopkg-2.7.3.pkg"
 DOWNLOAD_PATH="/tmp/autopkg-2.7.3.pkg"
 USER_HOME=$(eval echo ~$SUDO_USER)
-AUTOPKG_CACHE_PATH="${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome"
+AUTOPKG_CACHE_PATH="${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/"
 # REPO_URL="xxx" ## Uncomment if running locally
 # PACKAGE_AUTOMATION_TOKEN="xxx" ## Uncomment if running locally
 PACKAGE_FILE=$(ls "${AUTOPKG_CACHE_PATH}"/GoogleChrome*.pkg 2>/dev/null)
