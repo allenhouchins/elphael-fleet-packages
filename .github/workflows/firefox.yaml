@@ -1,4 +1,4 @@
-name: Create latest Google Chrome package
+name: Create latest Firefox package
 
 # Define the workflow trigger for manual runs
 on:
@@ -16,10 +16,10 @@ jobs:
         uses: actions/checkout@v4
 
       # Step 2: Run your GitOps script
-      - name: Run Google Chrome script
+      - name: Run Firefox script
         run: |
-          chmod +x ./.github/scripts/create_google_chrome_package.sh
-          ./.github/scripts/create_google_chrome_package.sh
+          chmod +x ./.github/scripts/create_firefox_package.sh
+          ./.github/scripts/create_firefox_package.sh
         env:
           REPO_URL: ${{ secrets.REPO_URL }}
           PACKAGE_AUTOMATION_TOKEN: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
