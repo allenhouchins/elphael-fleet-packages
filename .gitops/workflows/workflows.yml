@@ -15,14 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up a specific version of Node.js or other runtime (if needed)
-      # (Optional) Uncomment if your script requires Node.js or another runtime
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '16.x'
-
-      # Step 3: Run your GitOps script
+      # Step 2: Run your GitOps script
       - name: Run deployment script
         run: |
           chmod +x ./deploy.sh
