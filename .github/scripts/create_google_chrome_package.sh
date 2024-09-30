@@ -7,7 +7,7 @@ DOWNLOAD_PATH="/tmp/autopkg-2.7.3.pkg"
 # AUTOPKG_CACHE_PATH="${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/"
 # REPO_URL="xxx" ## Uncomment if running locally
 # PACKAGE_AUTOMATION_TOKEN="xxx" ## Uncomment if running locally
-PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg 2>/dev/null)
+PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg)
 # REPO_OWNER="xxx" ## Uncomment if running locally
 # REPO_NAME="" ## Uncomment if running locally
 
@@ -98,6 +98,7 @@ fi
 echo "Google Chrome installer created successfully!"
 
 echo "This is the Package File Path: $PACKAGE_FILE"
+
 
 # Verify that the package file exists
 if [ -f "$PACKAGE_FILE" ]; then
