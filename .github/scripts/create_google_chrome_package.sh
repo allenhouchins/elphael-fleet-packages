@@ -7,7 +7,7 @@ USER_HOME=$(eval echo ~$SUDO_USER)
 AUTOPKG_CACHE_PATH="${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome"
 # REPO_URL="xxx" ## Uncomment if running locally
 # PACKAGE_AUTOMATION_TOKEN="xxx" ## Uncomment if running locally
-PACKAGE_FILE=$(ls "$AUTOPKG_CACHE_PATH"/GoogleChrome*.pkg 2>/dev/null)
+PACKAGE_FILE=$(ls "${AUTOPKG_CACHE_PATH}"/GoogleChrome*.pkg 2>/dev/null)
 # REPO_OWNER="xxx" ## Uncomment if running locally
 # REPO_NAME="" ## Uncomment if running locally
 
@@ -106,7 +106,7 @@ else
 fi
 
 # Check the size of the package
-PKGSIZE=$(stat -f%z "$PACKAGE_FILE")
+PKGSIZE=$(stat -f%z "${PACKAGE_FILE}")
 
 if [ "$PKGSIZE" -eq 0 ]; then
     echo "Package size is 0. Something went wrong."
@@ -117,12 +117,14 @@ echo "Package size is: $PKGSIZE bytes"
 
 if [ "$PKGSIZE" -gt "104857600" ]; then
     echo "Installing git-lifs"
-    su -l $SUDO_USER -c 'brew install git-lfs'
+    # su -l $SUDO_USER -c 'brew install git-lfs'
+    brew install git-lfs
     add_git_lfs="git lfs install; git lfs track *.pkg; git add .gitattributes" ## Need to verify this adds to gitattributes as new packages get created
 else
     echo "Package is smaller than 100MB"
     add_git_lfs="echo "git lfs not needed. Continuing...""
 fi
+
 
 # Check if the recipe run was successful
 if [ $? -ne 0 ]; then
