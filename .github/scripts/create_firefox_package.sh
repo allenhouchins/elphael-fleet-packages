@@ -186,20 +186,20 @@ COMMIT_MESSAGE="Update URL in latest-firefox-pkg.yml"
 # GITHUB_TOKEN="xxx"  # Set your GitHub PAT here
 
 # Clone the repository
-git clone https://github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git /tmp/$GITOPS_REPO_NAME
-cd /tmp/$GITOPS_REPO_NAME || exit
+git clone https://github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git /tmp/gitops
+cd /tmp/gitops || exit
 
 # Checkout the target branch
 git checkout $BRANCH_NAME
 
-echo "File path /tmp/$GITOPS_REPO_NAME/$FILE_PATH"
+echo "File path /tmp/gitops/$FILE_PATH"
 
 # Modify the URL line in the file
-sed -i "s|^url:.*|url: $NEW_URL|" "/tmp/$GITOPS_REPO_NAME/$FILE_PATH"
+sed -i "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH"
 
 # Verify that the change has been made (optional)
 echo "Updated file content:"
-cat "/tmp/$GITOPS_REPO_NAME/$FILE_PATH"
+cat "/tmp/gitops/$FILE_PATH"
 
 # Configure Git (optional if not already configured)
 git config user.name "$USER_NAME"  # Replace with your GitHub username
