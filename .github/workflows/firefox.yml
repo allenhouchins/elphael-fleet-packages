@@ -27,3 +27,6 @@ jobs:
           REPO_NAME: ${{ secrets.REPO_NAME }}
           USER_EMAIL: ${{ secrets.USER_EMAIL}}
           USER_NAME: ${{ secrets.USER_NAME}}
+          SOFTARE_PACKAGE_UPDATER: ${{ secrets.SOFTARE_PACKAGE_UPDATER }}
+          GITOPS_REPO_OWNER: ${{ secrets.GITOPS_REPO_OWNER }}
+          GITOPS_REPO_NAME: ${{ secrets.GITOPS_REPO_NAME }}

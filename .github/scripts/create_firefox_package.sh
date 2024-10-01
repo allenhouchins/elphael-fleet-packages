@@ -167,6 +167,55 @@ else
     exit 1
 fi
 
+
+# Write new version info to Fleet policy
+
+#REPO_OWNER="xxx"
+#REPO_NAME="xxx"
+FILE_PATH="lib/software/latest-firefox-pkg.yml"
+version_string=$("$PACKAGE_FILE" | sed -n 's/.*Firefox-\([0-9.]*\)\.pkg/\1/p')
+NEW_URL="ttps://github.com/"$REPO_OWNER"/"$REPO_NAME"/raw/refs/heads/main/Firefox-$"version_string".pkg"  # Replace this with the new URL you want
+BRANCH_NAME="main"
+COMMIT_MESSAGE="Update URL in latest-firefox-pkg.yml"
+# GITHUB_TOKEN="xxx"  # Set your GitHub PAT here
+
+# Clone the repository
+git clone https://github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git /tmp/$GITOPS_REPO_NAME
+cd /tmp/$GITOPS_REPO_NAME || exit
+
+# Checkout the target branch
+git checkout $BRANCH_NAME
+
+# Modify the URL line in the file
+sed -i "s|^url:.*|url: $NEW_URL|" "$FILE_PATH"
+
+# Verify that the change has been made (optional)
+echo "Updated file content:"
+cat "$FILE_PATH"
+
+# Configure Git (optional if not already configured)
+git config user.name "$USER_NAME"  # Replace with your GitHub username
+git config user.email "$USER_EMAIL"  # Replace with your GitHub email
+
+# Add the changes
+git add "$FILE_PATH"
+
+# Commit the changes
+git commit -m "$COMMIT_MESSAGE"
+
+# Push the changes back to GitHub using the PAT for authentication
+git push https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git $BRANCH_NAME
+
+# Clean up (optional)
+cd ..
+rm -rf /tmp/$GITOPS_REPO_NAME
+
+echo "Changes have been committed and pushed successfully."
+
+
+
+
+
 # cd .. ## Uncomment if running locally
 # rm -rf /tmp/repo ## Uncomment if running locally
 # rm -rf ${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/*  ## ## Uncomment if running locally 
