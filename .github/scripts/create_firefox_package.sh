@@ -195,7 +195,10 @@ git checkout $BRANCH_NAME
 echo "File path /tmp/gitops/$FILE_PATH"
 
 # Modify the URL line in the file
-sed -i "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH"
+#sed -i "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH"
+
+sed "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH" > /tmp/tempfile && mv /tmp/tempfile "/tmp/gitops/$FILE_PATH"
+
 
 # Verify that the change has been made (optional)
 echo "Updated file content:"
