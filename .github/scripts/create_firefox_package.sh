@@ -219,7 +219,7 @@ git push https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS
 
 # Clean up (optional)
 cd ..
-rm -rf /tmp/$GITOPS_REPO_NAME
+rm -rf /tmp/gitops
 
 echo "Changes have been committed and pushed successfully."
 
