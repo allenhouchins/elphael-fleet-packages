@@ -144,7 +144,7 @@ git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.g
 # Copy the package to the GitHub repo
 echo "Copying package to GitHub repo..."
 # cp "${PACKAGE_FILE}" /tmp/repo
-cp /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg /tmp/repo
+cp /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechromepkg/GoogleChrome*.pkg /tmp/repo
 cd /tmp/repo
 # echo "This is the git lfs command at this step: $add_git_lfs"
 # eval "$add_git_lfs"
