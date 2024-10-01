@@ -173,7 +173,7 @@ fi
 #REPO_OWNER="xxx"
 #REPO_NAME="xxx"
 FILE_PATH="lib/software/latest-firefox-pkg.yml"
-version_string=$("$PACKAGE_FILE" | sed -n 's/.*Firefox-\([0-9.]*\)\.pkg/\1/p')
+version_string=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.FirefoxSignedPkg/downloads/ | sed -n 's/.*Firefox-\([0-9.]*\)\.pkg/\1/p')
 NEW_URL="ttps://github.com/"$REPO_OWNER"/"$REPO_NAME"/raw/refs/heads/main/Firefox-$"version_string".pkg"  # Replace this with the new URL you want
 BRANCH_NAME="main"
 COMMIT_MESSAGE="Update URL in latest-firefox-pkg.yml"
