@@ -192,14 +192,14 @@ cd /tmp/$GITOPS_REPO_NAME || exit
 # Checkout the target branch
 git checkout $BRANCH_NAME
 
-echo "File path $FILE_PATH"
+echo "File path /tmp/$GITOPS_REPO_NAME/$FILE_PATH"
 
 # Modify the URL line in the file
-sed -i "s|^url:.*|url: $NEW_URL|" "$FILE_PATH"
+sed -i "s|^url:.*|url: $NEW_URL|" "/tmp/$GITOPS_REPO_NAME/$FILE_PATH"
 
 # Verify that the change has been made (optional)
 echo "Updated file content:"
-cat "$FILE_PATH"
+cat "/tmp/$GITOPS_REPO_NAME/$FILE_PATH"
 
 # Configure Git (optional if not already configured)
 git config user.name "$USER_NAME"  # Replace with your GitHub username
