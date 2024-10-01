@@ -86,7 +86,7 @@ echo "'recipes' repo added successfully!"
 # Run the AutoPkg recipe for Firefox
 echo "Running the AutoPkg recipe to create the Firefox installer..."
 # su -l $SUDO_USER -c 'autopkg run -v Firefox.pkg' ## Uncomment if running locally and comment out next line
-autopkg run -v Firefox.pkg
+autopkg run -v /Users/runner/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/Mozilla/FirefoxSignedPkg.pkg.recipe
 
 # Check if the recipe run was successful
 if [ $? -ne 0 ]; then

@@ -86,7 +86,7 @@ echo "'recipes' repo added successfully!"
 # Run the AutoPkg recipe for Google Chrome
 echo "Running the AutoPkg recipe to create the Google Chrome installer..."
 # su -l $SUDO_USER -c 'autopkg run -v GoogleChrome.pkg' ## Uncomment if running locally and comment out next line
-autopkg run -v GoogleChrome.pkg
+autopkg run -v /Users/runner/Library/AutoPkg/RecipeRepos/com.github.autopkg.recipes/GoogleChrome/GoogleChromePkg.pkg.recipe
 
 # Check if the recipe run was successful
 if [ $? -ne 0 ]; then
