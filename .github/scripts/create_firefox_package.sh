@@ -96,7 +96,7 @@ fi
 
 echo "Firefox installer created successfully!"
 
-PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.Firefox_EN/Firefox*.pkg)
+PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.FirefoxSignedPkg/downloads/Firefox*.pkg)
 
 echo "This is the Package File Path: $PACKAGE_FILE"
 

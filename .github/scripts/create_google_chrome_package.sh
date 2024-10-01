@@ -96,7 +96,7 @@ fi
 
 echo "Google Chrome installer created successfully!"
 
-PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/GoogleChrome*.pkg)
+PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechromepkg/GoogleChrome*.pkg)
 
 echo "This is the Package File Path: $PACKAGE_FILE"
 
