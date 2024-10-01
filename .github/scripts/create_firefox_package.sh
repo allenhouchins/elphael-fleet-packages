@@ -179,7 +179,7 @@ echo $version_string
 
 NEW_URL="https://github.com/$REPO_OWNER/$REPO_NAME/raw/refs/heads/main/Firefox-"$version_string".pkg"  # Replace this with the new URL you want
 
-echo $NEW_URL
+echo "New URL: $NEW_URL"
 
 BRANCH_NAME="main"
 COMMIT_MESSAGE="Update URL in latest-firefox-pkg.yml"
@@ -191,6 +191,8 @@ cd /tmp/$GITOPS_REPO_NAME || exit
 
 # Checkout the target branch
 git checkout $BRANCH_NAME
+
+echo "File path $FILE_PATH"
 
 # Modify the URL line in the file
 sed -i "s|^url:.*|url: $NEW_URL|" "$FILE_PATH"
