@@ -1,0 +1,32 @@
+name: Create latest Google Chrome package
+
+# Define the workflow trigger for manual runs
+on:
+  workflow_dispatch:
+
+# Define the jobs to run
+jobs:
+  gitops-job:
+    # Define the operating system runner
+    runs-on: macos-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Run your GitOps script
+      - name: Run Firefox script
+        run: |
+          chmod +x ./.github/scripts/create_google_chrome_package.sh
+          ./.github/scripts/create_google_chrome_package.sh
+        env:
+          REPO_URL: ${{ secrets.REPO_URL }}
+          PACKAGE_AUTOMATION_TOKEN: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
+          REPO_OWNER: ${{ secrets.REPO_OWNER }}
+          REPO_NAME: ${{ secrets.REPO_NAME }}
+          USER_EMAIL: ${{ secrets.USER_EMAIL}}
+          USER_NAME: ${{ secrets.USER_NAME}}
+          SOFTWARE_PACKAGE_UPDATER: ${{ secrets.SOFTWARE_PACKAGE_UPDATER }}
+          GITOPS_REPO_OWNER: ${{ secrets.GITOPS_REPO_OWNER }}
+          GITOPS_REPO_NAME: ${{ secrets.GITOPS_REPO_NAME }}
