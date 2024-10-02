@@ -173,7 +173,7 @@ fi
 #REPO_OWNER="xxx"
 #REPO_NAME="xxx"
 FILE_PATH="lib/software/latest-google-chrome-pkg.yml"
-version_string=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechromepkg/downloads/ | sed -n 's/.*GoogleChrome-\([0-9.]*\)\.pkg/\1/p')
+version_string=$(ls /Users/runner/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechromepkg/ | sed -n 's/.*GoogleChrome-\([0-9.]*\)\.pkg/\1/p')
 
 echo $version_string
 
