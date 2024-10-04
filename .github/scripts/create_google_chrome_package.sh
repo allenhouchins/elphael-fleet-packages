@@ -119,20 +119,20 @@ fi
 echo "Package size is: $PKGSIZE bytes"
 
 if [ "$PKGSIZE" -gt "104857600" ]; then
-    echo "Installing git-lifs"
-    # su -l $SUDO_USER -c 'brew install git-lfs'
-    brew install git-lfs
+    # echo "Installing git-lifs" ##uncomment these lines if running locally
+    # # su -l $SUDO_USER -c 'brew install git-lfs'
+    # brew install git-lfs
     add_git_lfs="git lfs install; git lfs track *.pkg; git add .gitattributes" ## Need to verify this adds to gitattributes as new packages get created
 else
     echo "Package is smaller than 100MB"
     add_git_lfs="echo "git lfs not needed. Continuing...""
 fi
 
-# Check if the recipe run was successful
-if [ $? -ne 0 ]; then
-    echo "Failed to install git-lfs!"
-    exit 1
-fi
+# # Check if the recipe run was successful ##Uncomment if running locally
+# if [ $? -ne 0 ]; then
+#     echo "Failed to install git-lfs!"
+#     exit 1
+# fi
 
 # Configure git if necessary
 git config --global user.email "$USER_EMAIL"
