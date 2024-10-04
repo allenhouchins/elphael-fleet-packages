@@ -38,42 +38,42 @@ else
     echo "AutoPkg is already installed."
 fi
 
-# Check if Homebrew is installed
-if ! command -v brew &> /dev/null; then
-    echo "Homebrew is not installed. Installing Homebrew without root privileges..."
+# # Check if Homebrew is installed ## Remove comments if running locally
+# if ! command -v brew &> /dev/null; then
+#     echo "Homebrew is not installed. Installing Homebrew without root privileges..."
 
-    # Install Homebrew as the non-root user
-    su -l $SUDO_USER -c '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' ## Uncomment if running locally and comment out next line
-    brew install git
+#     # Install Homebrew as the non-root user
+#     su -l $SUDO_USER -c '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' ## Uncomment if running locally and comment out next line
+#     brew install git
 
-    # Check if Homebrew installation was successful
-    if [ $? -ne 0 ]; then
-        echo "Homebrew installation failed!"
-        exit 1
-    fi
+#     # Check if Homebrew installation was successful
+#     if [ $? -ne 0 ]; then
+#         echo "Homebrew installation failed!"
+#         exit 1
+#     fi
 
-    echo "Homebrew installation complete."
-else
-    echo "Homebrew is already installed."
-fi
+#     echo "Homebrew installation complete."
+# else
+#     echo "Homebrew is already installed."
+# fi
 
-# Install Git using Homebrew (no root privileges)
-echo "Installing Git using Homebrew..."
-# su -l $SUDO_USER -c 'brew install git' ## Uncomment if running locally and comment out next line
-brew install git
+# # Install Git using Homebrew (no root privileges)
+# echo "Installing Git using Homebrew..."
+# # su -l $SUDO_USER -c 'brew install git' ## Uncomment if running locally and comment out next line
+# brew install git
 
-# Check if Git installation was successful
-if [ $? -ne 0 ]; then
-    echo "Git installation failed!"
-    exit 1
-fi
+# # Check if Git installation was successful
+# if [ $? -ne 0 ]; then
+#     echo "Git installation failed!"
+#     exit 1
+# fi
 
-echo "Git installation complete."
+# echo "Git installation complete."
 
 # Add the AutoPkg 'recipes' repo after Git is installed
 echo "Adding the 'recipes' repo to AutoPkg..."
 # su -l $SUDO_USER -c 'autopkg repo-add recipes' ## Uncomment if running locally and comment out next line
-autopkg repo-add recipes
+autopkg repo-add recipes ## add whatever additional repos you need here
 
 # Check if repo-add was successful
 if [ $? -ne 0 ]; then
@@ -223,17 +223,9 @@ rm -rf /tmp/gitops
 
 echo "Changes have been committed and pushed successfully."
 
-
-
-
-
 # cd .. ## Uncomment if running locally
 # rm -rf /tmp/repo ## Uncomment if running locally
 # rm -rf ${USER_HOME}/Library/AutoPkg/Cache/com.github.autopkg.pkg.googlechrome/*  ## ## Uncomment if running locally 
-
-
-## write the new software package to YAML (basename)
-## Replace any existing Google Chrome entries
 
 exit 0
 
