@@ -42,7 +42,7 @@ echo "Running the AutoPkg recipe to create the Fleet package..."
 autopkg run -v fleetctl.pkg
 
 # Find the created package in the correct location
-PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/github.fleetdm.fleetctl.pkg.recipe/fleetctl-*.pkg | tail -n 1)
+PACKAGE_FILE=$(ls /Users/runner/Library/AutoPkg/Cache/github.fleetdm.fleetctl.pkg.recipe/fleetctl_v*.pkg | tail -n 1)
 
 if [ ! -f "$PACKAGE_FILE" ]; then
     echo "Package not found at expected location!"
