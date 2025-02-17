@@ -1,4 +1,4 @@
-name: Create latest Fleet package
+name: Create latest fleetctl package
 
 on:
   schedule:

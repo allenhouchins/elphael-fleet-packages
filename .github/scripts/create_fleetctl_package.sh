@@ -34,17 +34,30 @@ echo "Adding required AutoPkg repos..."
 autopkg repo-add homebysix-recipes
 autopkg repo-add https://github.com/allenhouchins/fleet-stuff.git
 
-# Run the AutoPkg recipe for Fleet
+# Run the AutoPkg recipe for Fleet with verbose output
 echo "Running the AutoPkg recipe to create the Fleet package..."
-autopkg run -v fleetctl.pkg
+autopkg run -vv fleetctl.pkg
 
-# Find the created package
-PACKAGE_FILE=$(ls ~/Library/AutoPkg/Cache/com.github.fleetctl.pkg/fleetctl-*.pkg | tail -n 1)
+# List the AutoPkg cache directory to help debug
+echo "Listing AutoPkg cache directory contents:"
+ls -la ~/Library/AutoPkg/Cache/
+
+# The package should be in the downloads subdirectory
+PACKAGE_FILE=$(find ~/Library/AutoPkg/Cache -name "fleetctl-*.pkg" -type f | tail -n 1)
 
 if [ ! -f "$PACKAGE_FILE" ]; then
-    echo "Package not found!"
-    exit 1
+    echo "Package not found! Checking alternate locations..."
+    # Try searching in the parent directories
+    PACKAGE_FILE=$(find ~/Library/AutoPkg -name "fleetctl-*.pkg" -type f | tail -n 1)
+    
+    if [ ! -f "$PACKAGE_FILE" ]; then
+        echo "Package still not found! Directory contents:"
+        find ~/Library/AutoPkg -type f
+        exit 1
+    fi
 fi
+
+echo "Found package at: $PACKAGE_FILE"
 
 # Check package size for Git LFS
 PKGSIZE=$(stat -f%z "${PACKAGE_FILE}")
