@@ -68,7 +68,12 @@ git config --global user.email "$USER_EMAIL"
 git config --global user.name "$USER_NAME"
 
 # Clone repo and add package
-git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.git" /tmp/repo
+echo "Cloning repository with token..."
+git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.git" /tmp/repo || {
+    echo "Failed to clone repository"
+    exit 1
+}
+
 cp "${PACKAGE_FILE}" /tmp/repo
 cd /tmp/repo
 eval "$add_git_lfs"
@@ -76,7 +81,11 @@ eval "$add_git_lfs"
 # Commit and push
 git add $(basename "$PACKAGE_FILE")
 git commit -m "Add Fleet package version ${FLEET_VERSION}"
-git push origin main
+echo "Pushing to repository..."
+git push origin HEAD:main || {
+    echo "Failed to push to repository"
+    exit 1
+}
 
 # Cleanup
 rm -rf /tmp/repo

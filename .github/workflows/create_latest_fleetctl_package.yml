@@ -5,6 +5,9 @@ on:
     - cron: '0 */6 * * *'  # Run every 6 hours
   workflow_dispatch:        # Allow manual triggers
 
+permissions:
+  contents: write          # Add explicit permission to write to repo
+
 jobs:
   check-fleet-release:
     runs-on: ubuntu-latest
@@ -14,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
 
       - name: Check latest Fleet release
         id: check_release
@@ -41,6 +46,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
 
       - name: Create Fleet package
         run: |
@@ -57,9 +64,9 @@ jobs:
       - name: Update version file
         if: success()
         run: |
-          echo "v${{ needs.check-fleet-release.outputs.version }}" > current_fleetctl_version.txt
+          echo "${{ needs.check-fleet-release.outputs.version }}" > current_fleetctl_version.txt
           git config user.name "${{ secrets.USER_NAME }}"
           git config user.email "${{ secrets.USER_EMAIL }}"
           git add current_fleetctl_version.txt
-          git commit -m "Update Fleet version to v${{ needs.check-fleet-release.outputs.version }}"
-          git push
+          git commit -m "Update Fleet version to ${{ needs.check-fleet-release.outputs.version }}"
+          git push origin HEAD:main
