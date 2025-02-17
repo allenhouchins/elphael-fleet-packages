@@ -34,6 +34,9 @@ echo "Adding required AutoPkg repos..."
 autopkg repo-add homebysix-recipes
 autopkg repo-add https://github.com/allenhouchins/fleet-stuff.git
 
+# Set up GitHub token for AutoPkg
+defaults write com.github.autopkg GITHUB_TOKEN -string "$PACKAGE_AUTOMATION_TOKEN"
+
 # Run the AutoPkg recipe for Fleet
 echo "Running the AutoPkg recipe to create the Fleet package..."
 autopkg run -v fleetctl.pkg
@@ -77,3 +80,5 @@ git push origin main
 
 # Cleanup
 rm -rf /tmp/repo
+# Clean up the GitHub token
+defaults delete com.github.autopkg GITHUB_TOKEN
