@@ -1,4 +1,4 @@
-name: Create latest fleetctl package
+name: Create latest Fleet package
 
 on:
   schedule:
@@ -19,6 +19,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
+          fetch-depth: 0
 
       - name: Check latest Fleet release
         id: check_release
@@ -34,7 +35,7 @@ jobs:
           
           if [ "$LATEST" != "$CURRENT" ]; then
             echo "new_release=true" >> $GITHUB_OUTPUT
-            echo "version=${LATEST#v}" >> $GITHUB_OUTPUT
+            echo "version=${LATEST}" >> $GITHUB_OUTPUT
           else
             echo "new_release=false" >> $GITHUB_OUTPUT
           fi
@@ -48,6 +49,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PACKAGE_AUTOMATION_TOKEN }}
+          fetch-depth: 0
 
       - name: Create Fleet package
         run: |
@@ -64,9 +66,18 @@ jobs:
       - name: Update version file
         if: success()
         run: |
+          # Ensure we're on the latest version of main
+          git fetch origin main
+          git reset --hard origin/main
+          
+          # Update version file
           echo "${{ needs.check-fleet-release.outputs.version }}" > current_fleetctl_version.txt
+          
+          # Configure git
           git config user.name "${{ secrets.USER_NAME }}"
           git config user.email "${{ secrets.USER_EMAIL }}"
+          
+          # Commit and push changes
           git add current_fleetctl_version.txt
           git commit -m "Update Fleet version to ${{ needs.check-fleet-release.outputs.version }}"
           git push origin HEAD:main
