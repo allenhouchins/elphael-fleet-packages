@@ -47,3 +47,4 @@ Firefox-137.0.2.pkg filter=lfs diff=lfs merge=lfs -text
 GoogleChrome-135.0.7049.96.pkg filter=lfs diff=lfs merge=lfs -text
 GoogleChrome-135.0.7049.115.pkg filter=lfs diff=lfs merge=lfs -text
 Firefox-138.0.pkg filter=lfs diff=lfs merge=lfs -text
+GoogleChrome-136.0.7103.49.pkg filter=lfs diff=lfs merge=lfs -text
