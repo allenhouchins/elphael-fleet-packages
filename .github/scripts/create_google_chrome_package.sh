@@ -197,84 +197,105 @@ if [ "$PKGSIZE" -gt "104857600" ] && [ -f .gitattributes ]; then
     git add .gitattributes
 fi
 
-# Commit the changes
-git commit -m "Add newest Google Chrome installer package: $PACKAGE_NAME"
+# Track whether we committed changes
+COMMITTED_CHANGES=false
 
-if [ $? -ne 0 ]; then
-    echo "Failed to commit package!"
-    exit 1
-fi
-
-# Push to the GitHub repository
-echo "Pushing to GitHub..."
-git push origin main
-
-# Check if the push was successful
-if [ $? -eq 0 ]; then
-    echo "Package uploaded to GitHub successfully!"
+# Check if there are any changes to commit
+if git diff --staged --quiet; then
+    echo "No changes to commit - package $PACKAGE_NAME already exists with the same content."
+    echo "Skipping commit and push."
 else
-    echo "Failed to upload package to GitHub."
-    exit 1
-fi
-
-# Extract version string for Fleet policy update
-version_string=$(basename "$PACKAGE_FILE" | sed -n 's/.*GoogleChrome-\([0-9.]*\)\.pkg/\1/p')
-
-echo "Extracted version: $version_string"
-
-# Write new version info to Fleet policy
-FILE_PATH="lib/software/latest-google-chrome-pkg.yml"
-NEW_URL="https://github.com/$REPO_OWNER/$REPO_NAME/raw/refs/heads/main/GoogleChrome-$version_string.pkg"
-
-echo "New URL: $NEW_URL"
-
-BRANCH_NAME="main"
-COMMIT_MESSAGE="Update URL in latest-google-chrome-pkg.yml"
-
-# Clone the GitOps repository
-git clone "https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git" /tmp/gitops
-
-if [ $? -ne 0 ]; then
-    echo "Failed to clone GitOps repository!"
-    exit 1
-fi
-
-cd /tmp/gitops
-
-# Checkout the target branch
-git checkout $BRANCH_NAME
-
-echo "Updating file: /tmp/gitops/$FILE_PATH"
-
-# Modify the URL line in the file
-if [ -f "/tmp/gitops/$FILE_PATH" ]; then
-    sed "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH" > /tmp/tempfile && mv /tmp/tempfile "/tmp/gitops/$FILE_PATH"
-    
-    # Verify that the change has been made
-    echo "Updated file content:"
-    cat "/tmp/gitops/$FILE_PATH"
-    
-    # Configure Git
-    git config user.name "$USER_NAME"
-    git config user.email "$USER_EMAIL"
-    
-    # Add the changes
-    git add "$FILE_PATH"
-    
     # Commit the changes
-    git commit -m "$COMMIT_MESSAGE"
-    
-    # Push the changes back to GitHub
-    git push "https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git" $BRANCH_NAME
+    git commit -m "Add newest Google Chrome installer package: $PACKAGE_NAME"
     
     if [ $? -eq 0 ]; then
-        echo "GitOps changes have been committed and pushed successfully."
+        COMMITTED_CHANGES=true
+        
+        # Push to the GitHub repository
+        echo "Pushing to GitHub..."
+        git push origin main
+        
+        # Check if the push was successful
+        if [ $? -eq 0 ]; then
+            echo "Package uploaded to GitHub successfully!"
+        else
+            echo "Failed to upload package to GitHub."
+            exit 1
+        fi
     else
-        echo "Failed to push GitOps changes."
+        echo "Failed to commit package!"
         exit 1
     fi
+fi
+
+# Only update GitOps if we actually committed and pushed changes
+if [ "$COMMITTED_CHANGES" = "true" ]; then
+    # Extract version string for Fleet policy update
+    version_string=$(basename "$PACKAGE_FILE" | sed -n 's/.*GoogleChrome-\([0-9.]*\)\.pkg/\1/p')
+    
+    echo "Extracted version: $version_string"
+    
+    # Write new version info to Fleet policy
+    FILE_PATH="lib/software/latest-google-chrome-pkg.yml"
+    NEW_URL="https://github.com/$REPO_OWNER/$REPO_NAME/raw/refs/heads/main/GoogleChrome-$version_string.pkg"
+    
+    echo "New URL: $NEW_URL"
+    
+    BRANCH_NAME="main"
+    COMMIT_MESSAGE="Update URL in latest-google-chrome-pkg.yml"
+    
+    # Clone the GitOps repository
+    git clone "https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git" /tmp/gitops
+    
+    if [ $? -ne 0 ]; then
+        echo "Failed to clone GitOps repository!"
+        exit 1
+    fi
+    
+    cd /tmp/gitops
+    
+    # Checkout the target branch
+    git checkout $BRANCH_NAME
+    
+    echo "Updating file: /tmp/gitops/$FILE_PATH"
+    
+    # Modify the URL line in the file
+    if [ -f "/tmp/gitops/$FILE_PATH" ]; then
+        sed "s|^url:.*|url: $NEW_URL|" "/tmp/gitops/$FILE_PATH" > /tmp/tempfile && mv /tmp/tempfile "/tmp/gitops/$FILE_PATH"
+        
+        # Verify that the change has been made
+        echo "Updated file content:"
+        cat "/tmp/gitops/$FILE_PATH"
+        
+        # Configure Git
+        git config user.name "$USER_NAME"
+        git config user.email "$USER_EMAIL"
+        
+        # Add the changes
+        git add "$FILE_PATH"
+        
+        # Check if there are changes to commit
+        if ! git diff --staged --quiet; then
+            # Commit the changes
+            git commit -m "$COMMIT_MESSAGE"
+            
+            # Push the changes back to GitHub
+            git push "https://$SOFTWARE_PACKAGE_UPDATER@github.com/$GITOPS_REPO_OWNER/$GITOPS_REPO_NAME.git" $BRANCH_NAME
+            
+            if [ $? -eq 0 ]; then
+                echo "GitOps changes have been committed and pushed successfully."
+            else
+                echo "Failed to push GitOps changes."
+                exit 1
+            fi
+        else
+            echo "GitOps file already has the correct URL, skipping update."
+        fi
+    else
+        echo "Warning: GitOps file $FILE_PATH not found!"
+    fi
 else
-    echo "Warning: GitOps file $FILE_PATH not found!"
+    echo "No package changes committed, skipping GitOps update."
 fi
 
 # Clean up
