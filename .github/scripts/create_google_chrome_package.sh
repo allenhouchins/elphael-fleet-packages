@@ -166,7 +166,33 @@ fi
 
 echo "Package copied successfully as: $PACKAGE_NAME"
 
-echo "Repository status after copying package:"
+# Clean up old packages - keep only the latest 2
+echo "Cleaning up old Google Chrome packages (keeping only the latest 2)..."
+# Get all Google Chrome packages sorted by modification time (newest first)
+# The newly copied package will be the newest
+ALL_CHROME_PACKAGES=$(ls -t GoogleChrome*.pkg 2>/dev/null)
+if [ -n "$ALL_CHROME_PACKAGES" ]; then
+    # Keep only the 2 newest packages
+    KEEP_PACKAGES=$(echo "$ALL_CHROME_PACKAGES" | head -2)
+    echo "Keeping the following packages:"
+    echo "$KEEP_PACKAGES"
+    
+    # Find all Google Chrome packages and delete those not in the keep list
+    for pkg in GoogleChrome*.pkg; do
+        if [ -f "$pkg" ]; then
+            if ! echo "$KEEP_PACKAGES" | grep -q "^$pkg$"; then
+                echo "Deleting old package: $pkg"
+                # Use git rm -f to remove tracked files (force in case of modifications)
+                # If file is untracked, git rm will fail, so just remove it
+                git rm -f "$pkg" 2>/dev/null || rm -f "$pkg"
+            fi
+        fi
+    done
+else
+    echo "No existing Google Chrome packages found to clean up."
+fi
+
+echo "Repository status after copying package and cleanup:"
 git status
 
 # Add and commit the package
