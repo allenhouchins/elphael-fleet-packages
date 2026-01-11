@@ -118,12 +118,14 @@ fi
 
 echo "Package size is: $PKGSIZE bytes"
 
-# Configure git if necessary
+# Configure git
 git config --global user.email "$USER_EMAIL"
 git config --global user.name "$USER_NAME"
 
-# Clone repo
-git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.git" /tmp/repo
+# Clone repo with LFS smudge skipped to avoid downloading large files
+# We only need the repository structure, not the actual LFS files
+echo "Cloning repository (skipping LFS file download)..."
+GIT_LFS_SKIP_SMUDGE=1 git clone "https://$PACKAGE_AUTOMATION_TOKEN@github.com/$REPO_OWNER/$REPO_NAME.git" /tmp/repo
 
 if [ $? -ne 0 ]; then
     echo "Failed to clone repository!"
@@ -133,25 +135,16 @@ fi
 # Change to repo directory
 cd /tmp/repo
 
-echo "Repository status before changes:"
-git status
-
-# Check if Git LFS is needed (>100MB)
+# Ensure Git LFS is initialized and .pkg files are tracked
 if [ "$PKGSIZE" -gt "104857600" ]; then
-    echo "Package is larger than 100MB, setting up Git LFS..."
-    
-    # Install and configure Git LFS
+    echo "Package is larger than 100MB, ensuring Git LFS is configured..."
     git lfs install
     
-    # Track .pkg files with LFS
-    git lfs track "*.pkg"
-    
-    # Add the .gitattributes file
-    git add .gitattributes
-    
-    echo "Git LFS configured for .pkg files"
-else
-    echo "Package is smaller than 100MB, Git LFS not needed"
+    # Ensure .pkg files are tracked by LFS
+    if ! grep -q "*.pkg filter=lfs" .gitattributes 2>/dev/null; then
+        git lfs track "*.pkg"
+        git add .gitattributes
+    fi
 fi
 
 # Copy the package to the GitHub repo
@@ -198,16 +191,11 @@ git status
 # Add and commit the package
 echo "Adding and committing the package..."
 
-# Add the package file
+# Add the package file and any .gitattributes changes
 git add "$PACKAGE_NAME"
-
-# If we set up LFS, make sure .gitattributes is also committed
-if [ "$PKGSIZE" -gt "104857600" ]; then
+if [ "$PKGSIZE" -gt "104857600" ] && [ -f .gitattributes ]; then
     git add .gitattributes
 fi
-
-echo "Files staged for commit:"
-git status --staged
 
 # Commit the changes
 git commit -m "Add newest Google Chrome installer package: $PACKAGE_NAME"
